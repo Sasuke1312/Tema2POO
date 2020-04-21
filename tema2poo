@@ -1,0 +1,463 @@
+#include <iostream>
+using namespace std;
+#include <cstring>
+#include <vector>
+#include <exception>
+
+class myexception : public exception{
+    public :
+        virtual const char* what(){
+            return "Eroare, s-a mai introdus o adresa cu acest nume";
+    }
+} myex;
+class MainClass{
+    private:
+        char nume[30];
+        int id;
+    public:
+        MainClass(int _id, char _nume[]);
+        ~MainClass();
+        char* get_nume();
+        int get_id();
+        virtual void afisareDetalii() = 0;
+        virtual void dataIntrodus() = 0;
+        virtual int retN() = 0;
+        virtual int retC1() = 0;
+        virtual int retC2() = 0;
+        virtual char* retT() = 0;
+};
+class NrNatural : public MainClass{
+    private:
+        int x;
+    public:
+        NrNatural(int _id, char _nume[], int _x);
+        ~NrNatural();
+        virtual void afisareDetalii();
+        virtual void dataIntrodus();
+        virtual int retN();
+        virtual int retC1();
+        virtual int retC2();
+        virtual char* retT();
+};
+class NrComplex : public MainClass{
+    private:
+        int real, imag;
+    public:
+        NrComplex(int _id, char _nume[], int _real, int _imag);
+        ~NrComplex();
+        virtual void afisareDetalii();
+        virtual void dataIntrodus();
+        virtual int retN();
+        virtual int retC1();
+        virtual int retC2();
+        virtual char* retT();
+};
+class Text : public MainClass{
+    private:
+        char txt[30];
+    public:
+        Text(int _id, char _nume[], char _txt[]);
+        ~Text();
+        virtual void afisareDetalii();
+        virtual void dataIntrodus();
+        virtual int retN();
+        virtual int retC1();
+        virtual int retC2();
+        virtual char* retT();
+};
+class Adresa : public MainClass{
+    private:
+        char tara[30];
+        char judet[30];
+        char oras[30];
+        char strada[30];
+        int nr;
+    public:
+        Adresa(int _id, char _nume[], char _tara[], char _judet[], char _oras[], char _strada[], int _nr);
+        ~Adresa();
+        virtual void afisareDetalii();
+        virtual void dataIntrodus();
+        virtual int retN();
+        virtual int retC1();
+        virtual int retC2();
+        virtual char* retT();
+};
+
+class Biblioteca{
+    private:
+        vector <MainClass*> proba;
+    public:
+        Biblioteca();
+        ~Biblioteca();
+        void meniu();
+        void BD();
+};
+
+
+MainClass :: MainClass(int _id, char _nume[]){
+    strcpy(nume, _nume);
+    id = _id;
+}
+MainClass :: ~MainClass(){
+
+}
+char* MainClass :: get_nume(){
+    return nume;
+}
+int MainClass :: get_id(){
+    return id;
+}
+
+
+NrNatural :: NrNatural(int _id, char _nume[], int _x) : MainClass(_id, _nume){
+    x = _x;
+}
+NrNatural :: ~NrNatural(){
+
+}
+void NrNatural :: afisareDetalii(){
+    cout << "A fost introdus un numar natural!" << '\n';
+}
+void NrNatural :: dataIntrodus(){
+    cout << "Numarul natural introdus a fost "<< x << '\n';
+}
+int NrNatural :: retN(){
+    return x;
+}
+int NrNatural :: retC1(){
+    return 0;
+}
+int NrNatural :: retC2(){
+    return 0;
+}
+char* NrNatural :: retT(){
+    return 0;
+}
+
+NrComplex :: NrComplex(int _id, char _nume[], int _real, int _imag) : MainClass(_id, _nume){
+    real = _real;
+    imag = _imag;
+}
+NrComplex :: ~NrComplex(){
+
+}
+void NrComplex :: afisareDetalii(){
+    cout << "A fost introdus un numar complex!" << '\n';
+}
+void NrComplex :: dataIntrodus(){
+    if(real == 0 && imag == 0)
+        cout << "Numarul complex introdus a fost 0";
+    else
+        if(real == 0)
+            cout << "Numarul complex introdus a fost " << imag << "i" << '\n';
+        else
+            if(imag == 0)
+                cout << "Numarul complex introdus a fost " << real << '\n';
+            else
+                if(imag > 0)
+                    cout << "Numarul complex introdus a fost " << real << " + " << imag << "i" << '\n';
+                else
+                    cout << "Numarul complex introdus a fost " << real << " " << imag << "i" << '\n';
+}
+int NrComplex :: retN(){
+    return 0;
+}
+int NrComplex :: retC1(){
+    return real;
+}
+int NrComplex :: retC2(){
+    return imag;
+}
+char* NrComplex :: retT(){
+    return 0;
+}
+
+Text :: Text(int _id, char _nume[], char _txt[]) : MainClass(_id, _nume){
+    strcpy(txt, _txt);
+}
+Text :: ~Text(){
+
+}
+void Text :: afisareDetalii(){
+    cout << "A fost introdus un text!" << '\n';
+}
+void Text :: dataIntrodus(){
+    cout << "Textul introdus a fost " << txt << '\n';
+}
+int Text :: retN(){
+    return 0;
+}
+int Text :: retC1(){
+    return 0;
+}
+int Text :: retC2(){
+    return 0;
+}
+char* Text :: retT(){
+    return txt;
+}
+
+Adresa :: Adresa(int _id, char _nume[], char _tara[], char _judet[], char _oras[], char _strada[], int _nr) : MainClass(_id, _nume){
+    strcpy(tara, _tara);
+    strcpy(judet, _judet);
+    strcpy(oras, _oras);
+    strcpy(strada, _strada);
+    nr = _nr;
+}
+Adresa :: ~Adresa(){
+
+}
+void Adresa :: afisareDetalii(){
+    cout << "A fost introdusa o adresa!" << '\n';
+}
+void Adresa :: dataIntrodus(){
+    cout << "Adresa introdusa a fost :" << '\n';
+    cout << "Tara : "  << tara << '\n';
+    cout << "Judet : " << judet << '\n';
+    cout << "Orasul : " << oras << '\n';
+    cout << "Strada : " << strada << '\n';
+    cout << "Numarul : " << nr << '\n';
+}
+int Adresa :: retN(){
+    return 0;
+}
+int Adresa :: retC1(){
+    return 0;
+}
+int Adresa :: retC2(){
+    return 0;
+}
+char* Adresa :: retT(){
+    return 0;
+}
+
+Biblioteca :: Biblioteca(){
+    cout << "Adaugare/Stergere" << '\n' << '\n';
+}
+Biblioteca :: ~Biblioteca(){
+
+}
+void Biblioteca :: meniu(){
+    int okk = 1;
+    int select;
+    do{
+        cout << "Optiuni" << '\n';
+        cout << "1. Adauga" << '\n' << "2. Stergere" << '\n' <<"3. Iesire" << '\n';
+        cout << "Optiunea ta : ";
+        cin >> select;
+        if(select == 1){
+            int ok = 0;
+            int opt;
+            do{
+                cout << "Optiuni de adaugare " << '\n';
+                cout << "1. Adauga un numar natural" << '\n' << "2. Adauga un numar complex" << '\n' << "3. Adauga un text" << '\n' << "4. Adauga o adresa" << '\n';
+                cout << "Optiunea ta de adaugare : ";
+                cin >> opt;
+                if(opt == 1){
+                    char _nume[22];
+                    int _x;
+                    int _id;
+                    cout << "Id : ";
+                    cin >> _id;
+                    cout << "Nume : ";
+                    cin >> _nume;
+                    cout << "Numar natural : ";
+                    cin >> _x;
+                    int aux = 0;
+                    int poz = 0;
+                    int ppoz = 0;
+                    int w = 0;
+                    for(auto it : proba){
+                        if(strcmp(it->get_nume(), _nume) == 0){
+                            aux = it->retN();
+                            w = 1;
+                            ppoz = poz;
+                        }
+                        poz += 1;
+                    }
+                    try{
+                        if(w == 0)
+                            proba.push_back(new NrNatural(_id, _nume, _x));
+                        else
+                            throw(aux);
+                    }
+                    catch(int num){
+                        proba.erase(proba.begin() + ppoz);
+                        proba.push_back(new NrNatural(_id, _nume, _x + aux));
+                    }
+                }
+                else
+                    if(opt == 2){
+                        char msj[22];
+                        int x, y, _id;
+                        cout << "Id : ";
+                        cin >> _id;
+                        cout << "Nume : ";
+                        cin >> msj;
+                        cout << "Partea intreaga : ";
+                        cin >> x;
+                        cout << "Partea imaginara : ";
+                        cin >> y;
+                        int aux = 0;
+                        int auxx = 0;
+                        int poz = 0;
+                        int ppoz = 0;
+                        int w = 0;
+                        for(auto it : proba){
+                            if(strcmp(it->get_nume(), msj) == 0){
+                                aux = it->retC1();
+                                auxx = it->retC2();
+                                w = 1;
+                                ppoz = poz;
+                            }
+                            poz += 1;
+                        }
+                        if(w == 0)
+                            proba.push_back(new NrComplex(_id, msj, x, y));
+                        else{
+                            proba.erase(proba.begin() + ppoz);
+                            proba.push_back(new NrComplex(_id, msj, x + aux, y + auxx));
+                        }
+                    }
+                    else
+                        if(opt == 3){
+                            int _id;
+                            char msj[22];
+                            char msj_text[22];
+                            cout << "Id : ";
+                            cin >> _id;
+                            cout << "Nume : ";
+                            cin >> msj;
+                            cout << "Text : ";
+                            cin >> msj_text;
+                            char *aux;
+                            int poz = 0;
+                            int ppoz = 0;
+                            int w = 0;
+                            for(auto it : proba){
+                                if(strcmp(it->get_nume(), msj) == 0){
+                                    aux = it->retT();
+                                    w = 1;
+                                    ppoz = poz;
+                                }
+                                poz += 1;
+                            }
+                            try{
+                                if(w == 0)
+                                    proba.push_back(new Text(_id, msj, msj_text));
+                                else
+                                    throw(aux);
+                            }
+                            catch(char *aux){
+                                proba.erase(proba.begin() + ppoz);
+                                proba.push_back(new Text(_id, msj, strcat(msj_text, aux)));
+                            }
+                        }
+                        else
+                            if(opt = 4){
+                                int _id;
+                                char _nume[30];
+                                char _tara[30];
+                                char _judet[30];
+                                char _oras[30];
+                                char _strada[30];
+                                int _nr;
+                                cout << "Id : ";
+                                cin >> _id;
+                                cout << "Nume : ";
+                                cin >> _nume;
+                                cout << "Tara : ";
+                                cin >> _tara;
+                                cout << "Judet : ";
+                                cin >> _judet;
+                                cout << "Oras : ";
+                                cin >> _oras;
+                                cout << "Strada : ";
+                                cin >> _strada;
+                                cout << "Nr : ";
+                                cin >> _nr;
+                                int w = 0;
+                                for(auto it : proba){
+                                    if(strcmp(it->get_nume(), _nume) == 0)
+                                        w = 1;
+                                }
+                                try{
+                                    if(w == 1)
+                                        throw(myex);
+                                    else
+                                        proba.push_back(new Adresa(_id, _nume, _tara, _judet, _oras, _strada, _nr));
+                                }
+                                catch(myexception& e){
+                                    cout << e.what() << '\n';
+                                }
+
+                            }
+                cout << "Mai introduceti?" << '\n' << "0.NU" << '\n' << "1.DA" << '\n';
+                cin >> ok;
+            }while(ok == 1);
+        }
+        else
+            if(select == 2){
+                int stg;
+                int okkk = 0;
+                do{
+                    cout << "Optiuni de stergere : " << '\n';
+                    cout << "1. Id " << '\n' << "2. Nume" << '\n';
+                    cout << "Optiunea ta de stergere : ";
+                    cin >> stg;
+                    if(stg == 1){
+                        int idSters;
+                        cout << "Id-ul informatiei ce urmeaza a fi stearsa : ";
+                        cin >> idSters;
+                        int poz = 0;
+                        for(auto it : proba){
+                            if(it -> get_id() == idSters){
+                                proba.erase(proba.begin() + poz);
+                                cout << "Infomatia cu id-ul " << idSters << " a fost stearsa" << '\n';
+                                break;
+                            }
+                            poz += 1;
+                        }
+                    }
+                    else
+                        if(stg == 2){
+                            char numeSters[30];
+                            cout << "Numele informatie ce urmeaza a fi stearsa : ";
+                            cin >> numeSters;
+                            int poz = 0;
+                            for(auto it : proba){
+                                if(strcmp(it -> get_nume(), numeSters) == 0){
+                                    proba.erase(proba.begin() + poz);
+                                    cout << "Informatia cu numele " << numeSters << " a fost stearsa" << '\n';
+                                    break;
+                                }
+                                poz += 1;
+                            }
+                        }
+                    cout << "Mai stergeti?" << '\n' << "0.NU" << '\n' << "1.DA" << '\n';
+                    cin >> okkk;
+                }while(okkk == 1);
+            }
+            else
+                if(select == 3){
+                    return;
+                }
+    }while(okk == 1);
+}
+void Biblioteca :: BD(){
+    for(auto it : proba){
+        cout << '\n';
+        cout << "Nume : " << it -> get_nume() << '\n';
+        it -> afisareDetalii();
+        it -> dataIntrodus();
+        cout << "ID : " << it -> get_id() << '\n';
+    }
+}
+int main() {
+
+    Biblioteca X;
+    X.meniu();
+    X.BD();
+   return 0;
+
+}
